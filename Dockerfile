@@ -22,10 +22,10 @@ ENV MYSQL_MAJOR 5.7
 # the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
 # also, we set debconf keys to make APT a little quieter
 RUN { \
-        echo mysql-server mysql-server/root_password password ''; \
-        echo mysql-server mysql-server/root_password_again password ''; \
+        echo mysql-server mysql-server/root_password password password; \
+        echo mysql-server mysql-server/root_password_again password password; \
     } | debconf-set-selections \
-    && apt-get update && apt-get install -y mysql-server-${MYSQL_MAJOR} && rm -rf /var/lib/apt/lists/* \
+    && apt-get update && apt-get install -y mysql-server-${MYSQL_MAJOR} && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql
 
 # comment out a few problematic configuration values
