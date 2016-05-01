@@ -25,14 +25,14 @@ RUN { \
         echo mysql-server mysql-server/root_password password password; \
         echo mysql-server mysql-server/root_password_again password password; \
     } | debconf-set-selections \
-    && apt-get update && apt-get install -y mysql-server-${MYSQL_MAJOR} && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && apt-get update && apt-get install -y mysql-server-${MYSQL_MAJOR} && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql
 
 # comment out a few problematic configuration values
 # don't reverse lookup hostnames, they are usually another container
-RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/my.cnf \
-    && echo 'skip-host-cache\nskip-name-resolve' | awk '{ print } $1 == "[mysqld]" && c == 0 { c = 1; system("cat") }' /etc/mysql/my.cnf > /tmp/my.cnf \
-    && mv /tmp/my.cnf /etc/mysql/my.cnf
+RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/mysql.conf.d/mysqld.cnf \
+    && echo 'skip-host-cache\nskip-name-resolve' | awk '{ print } $1 == "[mysqld]" && c == 0 { c = 1; system("cat") }' /etc/mysql/mysql.conf.d/mysqld.cnf > /tmp/my.cnf \
+    && mv /tmp/my.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
 
 VOLUME /var/lib/mysql
 
