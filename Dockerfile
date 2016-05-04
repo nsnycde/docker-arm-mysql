@@ -33,7 +33,7 @@ VOLUME /var/lib/mysql
 COPY docker-entrypoint.sh /opt/docker-arm-mysql/
 
 ## Set the entrypoint script, used to configure depending on requirements.
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/docker-arm-mysql/docker-entrypoint.sh"]
 
 ## Expose the MySQL port
 EXPOSE 3306
