@@ -72,7 +72,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
       MYSQL_ROOT_PASSWORD="$(pwgen -1 32)"
       echo "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
     fi
-    "${mysql[@]}" <<-"
+    "${mysql[@]}" <<< "
       -- What's done in this file shouldn't be replicated
       --  or products like mysql-fabric won't work
       SET @@SESSION.SQL_LOG_BIN=0;
@@ -120,9 +120,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## I think its expires the root password or turns it into a one time use paassword.
     if [ ! -z "$MYSQL_ONETIME_PASSWORD" ]; then
-      "${mysql[@]}" <<-"
-        ALTER USER 'root'@'%' PASSWORD EXPIRE;
-      "
+      "${mysql[@]}" <<< "ALTER USER 'root'@'%' PASSWORD EXPIRE;"
     fi
 
     ## Stop the MySQL daemon we started to do the extra configuration
