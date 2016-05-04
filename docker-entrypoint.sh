@@ -23,8 +23,10 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
   ## Find the MySQL data directory
   DATA_DIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
-  ## Only run if the .HAS_ALREADY_CONFIGURED is not present
-  if [ ! -d "${DATA_DIR}/mysql" ]; then
+  ALREADY_CONFIGURED_FILE="/opt/docker-arm-mysql/.has_already_configured_mysql"
+
+  ## Only run if the ALREADY_CONFIGURED_FILE is not present
+  if [ ! -f "${ALREADY_CONFIGURED_FILE}" ]; then
 
     ## Enforce configuration requirements
     if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
@@ -128,6 +130,9 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
       echo >&2 'MySQL init process failed.'
       exit 1
     fi
+
+    ## Create the already configured file, as we've just configured MySQL
+    touch "${ALREADY_CONFIGURED_FILE}"
 
     echo
     echo 'MySQL init process done. Ready for start up.'
