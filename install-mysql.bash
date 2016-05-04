@@ -16,7 +16,7 @@ apt-get install -y mysql-server-${MYSQL_MAJOR}
 ## Clean up any mess
 apt-get clean autoclean
 apt-get autoremove -y
-rm -rf /var/lib/{apt,dpkg,cache,log}/
+rm -rf /var/lib/apt/lists/*
 
 ## Empty out the default MySQL data directory, its for our entrypoint script
 rm -rf /var/lib/mysql
