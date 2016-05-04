@@ -43,7 +43,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
     pid="$!"
 
     ## MySQL command
-    mysql=( mysql --protocol=socket -uroot -ppassword )
+    mysql=( mysql --protocol=socket -uroot )
 
     ## Wait until MySQL has started up
     for i in {30..0}; do
@@ -88,13 +88,17 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## Update command with root password if set
     if [ ! -z "$MYSQL_ROOT_PASSWORD" ]; then
-      mysql=( mysql --protocol=socket -uroot -p"${MYSQL_ROOT_PASSWORD}" )
+
+      ## Update the MySQL command with root password
+      mysql+=( -p"${MYSQL_ROOT_PASSWORD}" )
     fi
 
     ## Create database if specified
     if [ "$MYSQL_DATABASE" ]; then
       echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;" | "${mysql[@]}"
-      mysql=( mysql --protocol=socket -uroot -p"${MYSQL_ROOT_PASSWORD}" "$MYSQL_DATABASE" )
+
+      ## Update the MySQL command with database
+      mysql+=( "$MYSQL_DATABASE" )
     fi
 
     ## Create database user if specified
