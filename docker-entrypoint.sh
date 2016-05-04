@@ -62,17 +62,21 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
       exit 1
     fi
 
-    ## I don't know what this is doing...
+    ## Load timezones into MySQL
     if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
+      echo 'Loading timezones into MySQL'
       # sed is for https://bugs.mysql.com/bug.php?id=20545
       mysql_tzinfo_to_sql /usr/share/zoneinfo | sed 's/Local time zone must be set--see zic manual page/FCTY/' | "${mysql[@]}" mysql
     fi
 
-    ## Either generate a random password or set using the provided value
+    ## Generate a random password for root if required
     if [ ! -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
       MYSQL_ROOT_PASSWORD="$(pwgen -1 32)"
       echo "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
     fi
+
+    ## Set the password for root
+    echo 'Setting password for root'
     "${mysql[@]}" <<< "
       -- What's done in this file shouldn't be replicated
       --  or products like mysql-fabric won't work
@@ -94,6 +98,8 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## Create database if specified
     if [ "$MYSQL_DATABASE" ]; then
+      echo 'Creating database: ${MYSQL_DATABASE}'
+
       echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;" | "${mysql[@]}"
 
       ## Update the MySQL command with database
@@ -102,9 +108,11 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## Create database user if specified
     if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
+      echo 'Creating user: ${MYSQL_USER}'
       echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;" | "${mysql[@]}"
 
       if [ "$MYSQL_DATABASE" ]; then
+        echo 'Granting permissions for user: ${MYSQL_USER} on: ${MYSQL_DATABASE}'
         echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
       fi
 
@@ -125,6 +133,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## I think its expires the root password or turns it into a one time use paassword.
     if [ ! -z "$MYSQL_ONETIME_PASSWORD" ]; then
+      echo 'Setting root password as one time use'
       "${mysql[@]}" <<< "ALTER USER 'root'@'%' PASSWORD EXPIRE;"
     fi
 
