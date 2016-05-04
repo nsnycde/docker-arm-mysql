@@ -56,8 +56,8 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
     if [ "$i" = 0 ]; then
 
       ## Dump the MySQL logs
-      cat >&2 /var/log/mysql.err
-      cat >&2 /var/log/mysql.log
+      [ -f /var/log/mysql/error.log ] && cat >&2 /var/log/mysql/error.log
+      [ -f /var/log/mysql/mysql.log ] && cat >&2 /var/log/mysql/mysql.log
 
       echo >&2 'MySQL init process failed.'
       exit 1
