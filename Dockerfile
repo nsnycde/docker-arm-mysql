@@ -16,15 +16,17 @@ COPY install-mysql.bash /opt/docker-arm-mysql/
 ## Install MySQL
 RUN /opt/docker-arm-mysql/install-mysql.bash
 
-##
-## TODO - Extra configuration to enable running inside docker
-##
+## TODO - Upload MySQL configuration for docker script
+#COPY configure-mysql-for-docker.bash /opt/docker-arm-mysql/
 
-## Upload MySQL configuration for docker script
-COPY configure-mysql-for-docker.bash /opt/docker-arm-mysql/
+## TODO - Run MySQL configuration for docker script
+#RUN /opt/docker-arm-mysql/configure-mysql-for-docker.bash
 
-## Run MySQL configuration for docker script
-RUN /opt/docker-arm-mysql/configure-mysql-for-docker.bash
+## Upload script to initialise MySQL
+COPY initialise-mysql-insecure.bash /opt/docker-arm-mysql/
+
+## Run script to initialize MySQL
+RUN /opt/docker-arm-mysql/initialise-mysql-insecure.bash
 
 ## Setup MySQL data directory as a volume
 VOLUME /var/lib/mysql

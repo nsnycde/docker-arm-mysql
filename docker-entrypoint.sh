@@ -23,7 +23,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
   ## Find the MySQL data directory
   DATA_DIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
-  ## Only run if the MySQL data directory hasn't been populated
+  ## Only run if the .HAS_ALREADY_CONFIGURED is not present
   if [ ! -d "${DATA_DIR}/mysql" ]; then
 
     ## Enforce configuration requirements
@@ -34,12 +34,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
     fi
 
     ## Make sure the data directory exists and is owened by MySQL
-    mkdir -p "${DATA_DIR}"
     chown -R mysql:mysql "${DATA_DIR}"
-
-    echo 'Initializing database'
-    "$@" --initialize-insecure
-    echo 'Database initialized'
 
     ## Start the MySQL daemon
     "$@" --skip-networking &
