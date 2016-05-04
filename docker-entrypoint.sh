@@ -21,7 +21,7 @@ done
 if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
   ## Find the MySQL data directory
-  DATADIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
+  DATA_DIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
   ## Only run if the MySQL data directory hasn't been populated
   if [ ! -d "${DATA_DIR}/mysql" ]; then
