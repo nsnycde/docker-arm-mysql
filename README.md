@@ -24,9 +24,9 @@ Coming Soon™
 
   docker login
 
-  docker tag beercan1989/arm-mysql:5.7 beercan1989/arm-mysql:5
-  docker tag beercan1989/arm-mysql:5.7 beercan1989/arm-mysql:5.7
-  docker tag beercan1989/arm-mysql:5.7 beercan1989/arm-mysql:5.7.12
+  docker tag beercan1989/arm-mysql:latest beercan1989/arm-mysql:5
+  docker tag beercan1989/arm-mysql:latest beercan1989/arm-mysql:5.7
+  docker tag beercan1989/arm-mysql:latest beercan1989/arm-mysql:5.7.12
 
   docker push beercan1989/arm-mysql:latest
   docker push beercan1989/arm-mysql:5
