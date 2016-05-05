@@ -10,23 +10,21 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 ## Set the mysql version to install
 ENV MYSQL_MAJOR 5.7
 
-## Upload MySQL install script
-COPY install-mysql.bash /opt/docker-arm-mysql/
-
 ## Install MySQL
+COPY install-mysql.bash /opt/docker-arm-mysql/
 RUN /opt/docker-arm-mysql/install-mysql.bash
 
-## Upload MySQL configuration for docker script
+## Configuration MySQL for docker script
 COPY configure-mysql-for-docker.bash /opt/docker-arm-mysql/
-
-## Run MySQL configuration for docker script
 RUN /opt/docker-arm-mysql/configure-mysql-for-docker.bash
 
-## Upload script to initialise MySQL
+## Initialize MySQL
 COPY initialise-mysql-insecure.bash /opt/docker-arm-mysql/
-
-## Run script to initialize MySQL
 RUN /opt/docker-arm-mysql/initialise-mysql-insecure.bash
+
+## Load timezones into MySQL
+COPY load-timezones-into-mysql.bash /opt/docker-arm-mysql/
+RUN /opt/docker-arm-mysql/load-timezones-into-mysql.bash
 
 ## Setup MySQL data directory as a volume
 VOLUME /var/lib/mysql

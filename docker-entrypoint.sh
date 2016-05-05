@@ -62,13 +62,6 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
       exit 1
     fi
 
-    ## Load timezones into MySQL
-    if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
-      echo 'Loading timezones into MySQL'
-      # sed is for https://bugs.mysql.com/bug.php?id=20545
-      mysql_tzinfo_to_sql /usr/share/zoneinfo | sed 's/Local time zone must be set--see zic manual page/FCTY/' | "${mysql[@]}" mysql
-    fi
-
     ## Generate a random password for root if required
     if [ ! -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
       MYSQL_ROOT_PASSWORD="$(pwgen -1 32)"
@@ -98,7 +91,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## Create database if specified
     if [ "$MYSQL_DATABASE" ]; then
-      echo 'Creating database: ${MYSQL_DATABASE}'
+      echo "Creating database: ${MYSQL_DATABASE}"
 
       echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;" | "${mysql[@]}"
 
@@ -108,11 +101,11 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
     ## Create database user if specified
     if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
-      echo 'Creating user: ${MYSQL_USER}'
+      echo "Creating user: ${MYSQL_USER}"
       echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;" | "${mysql[@]}"
 
       if [ "$MYSQL_DATABASE" ]; then
-        echo 'Granting permissions for user: ${MYSQL_USER} on: ${MYSQL_DATABASE}'
+        echo "Granting permissions for user: ${MYSQL_USER} on: ${MYSQL_DATABASE}"
         echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
       fi
 
