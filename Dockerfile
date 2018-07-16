@@ -13,9 +13,12 @@ ENV MYSQL_MAJOR 5.7
 ## Upload the scripts
 COPY *.*sh /opt/docker-arm-mysql/
 
-RUN /opt/docker-arm-mysql/install-mysql.bash && \               ## Install MySQL
-    /opt/docker-arm-mysql/configure-mysql-for-docker.bash && \  ## Run MySQL configuration for docker script
-    /opt/docker-arm-mysql/initialise-mysql-insecure.bash        ## Run script to initialize MySQL
+## Install MySQL
+## Run MySQL configuration for docker script
+## Run script to initialize MySQL
+RUN /opt/docker-arm-mysql/install-mysql.bash && \
+    /opt/docker-arm-mysql/configure-mysql-for-docker.bash && \
+    /opt/docker-arm-mysql/initialise-mysql-insecure.bash
 
 ## Setup MySQL data directory as a volume
 VOLUME /var/lib/mysql
