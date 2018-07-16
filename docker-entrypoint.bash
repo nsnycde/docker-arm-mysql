@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 set -eo pipefail
 
 ## if command starts with an option, prepend mysqld

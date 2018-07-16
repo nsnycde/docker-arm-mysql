@@ -10,32 +10,18 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 ## Set the mysql version to install
 ENV MYSQL_MAJOR 5.7
 
-## Upload MySQL install script
-COPY install-mysql.bash /opt/docker-arm-mysql/
+## Upload the scripts
+COPY *.*sh /opt/docker-arm-mysql/
 
-## Install MySQL
-RUN /opt/docker-arm-mysql/install-mysql.bash
-
-## Upload MySQL configuration for docker script
-COPY configure-mysql-for-docker.bash /opt/docker-arm-mysql/
-
-## Run MySQL configuration for docker script
-RUN /opt/docker-arm-mysql/configure-mysql-for-docker.bash
-
-## Upload script to initialise MySQL
-COPY initialise-mysql-insecure.bash /opt/docker-arm-mysql/
-
-## Run script to initialize MySQL
-RUN /opt/docker-arm-mysql/initialise-mysql-insecure.bash
+RUN /opt/docker-arm-mysql/install-mysql.bash && \               ## Install MySQL
+    /opt/docker-arm-mysql/configure-mysql-for-docker.bash && \  ## Run MySQL configuration for docker script
+    /opt/docker-arm-mysql/initialise-mysql-insecure.bash        ## Run script to initialize MySQL
 
 ## Setup MySQL data directory as a volume
 VOLUME /var/lib/mysql
 
-## Upload docker entrypoint script
-COPY docker-entrypoint.sh /opt/docker-arm-mysql/
-
 ## Set the entrypoint script, used to configure depending on requirements.
-ENTRYPOINT ["/opt/docker-arm-mysql/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/docker-arm-mysql/docker-entrypoint.bash"]
 
 ## Expose the MySQL port
 EXPOSE 3306
