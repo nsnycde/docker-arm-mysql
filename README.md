@@ -1,3 +1,9 @@
+fork后进行修改，可对mysql数据卷进行映射，判断映射路径中是否存在mysql目录来决定是否执行mysql初始化操作
+
+docker run -p 3306:3306 -v /soft/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root nsn/mysql:5.7
+
+
+
 # MySQL on an ARMv7 docker base
 
 Based on: https://github.com/docker-library/mysql/tree/master/5.7
