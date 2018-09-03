@@ -28,10 +28,10 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
     /opt/docker-arm-mysql/initialise-mysql-insecure.bash
   fi
 
-  ## ALREADY_CONFIGURED_FILE="/opt/docker-arm-mysql/.has_already_configured_mysql"
+  ALREADY_CONFIGURED_FILE="/opt/docker-arm-mysql/.has_already_configured_mysql"
 
   ## Only run if the ALREADY_CONFIGURED_FILE is not present
-  if [ ! -f $DATA_DIR/.has_already_configured_mysql ]; then
+  if [ ! -f "${ALREADY_CONFIGURED_FILE}" ]; then
 
     ## Enforce configuration requirements
     if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
@@ -149,8 +149,7 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
     fi
 
     ## Create the already configured file, as we've just configured MySQL
-    ## touch "${ALREADY_CONFIGURED_FILE}"
-    touch $DATA_DIR/.has_already_configured_mysql	
+    touch "${ALREADY_CONFIGURED_FILE}"
 
     echo
     echo 'MySQL init process done. Ready for start up.'
