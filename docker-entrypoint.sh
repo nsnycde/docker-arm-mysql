@@ -22,6 +22,11 @@ if [ "$1" = 'mysqld' -a -z "${wantHelp}" ]; then
 
   ## Find the MySQL data directory
   DATA_DIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
+  
+  ## 判断是否需要初始化,简单判断数据目录mysql目录是否存在,不存在则进行初始化
+  if [ ! -d $DATA_DIR/mysql ];then
+    /opt/docker-arm-mysql/initialise-mysql-insecure.bash
+  fi
 
   ALREADY_CONFIGURED_FILE="/opt/docker-arm-mysql/.has_already_configured_mysql"
 

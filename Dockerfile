@@ -25,8 +25,9 @@ RUN /opt/docker-arm-mysql/configure-mysql-for-docker.bash
 ## Upload script to initialise MySQL
 COPY initialise-mysql-insecure.bash /opt/docker-arm-mysql/
 
+## mysql初始化操作放在docker-entrypoint.sh,用于将初始化数据初始到宿主机映射目录
 ## Run script to initialize MySQL
-RUN /opt/docker-arm-mysql/initialise-mysql-insecure.bash
+## RUN /opt/docker-arm-mysql/initialise-mysql-insecure.bash
 
 ## Setup MySQL data directory as a volume
 VOLUME /var/lib/mysql
